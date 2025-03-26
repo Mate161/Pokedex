@@ -53,6 +53,20 @@
       margin-top: 20px;
       font-weight: bold;
     }
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      h1 {
+        font-size: 22px;
+      }
+      #filter {
+        font-size: 14px;
+      }
+      table {
+        font-size: 14px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -101,7 +115,6 @@
       { name: "Makabaja", nummer: "062/142", typ: "Geist", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.04" },
       { name: "Schlukwech", nummer: "092/142", typ: "Gift", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Uncommon", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.03" },
       { name: "2× Tentagra", nummer: "017/142", typ: "Wasser", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.04" }
-      // (Rest der Karten hier einfügen, gekürzt für Beispiel)
     ];
 
     function ladeTabelle() {
@@ -174,4 +187,6 @@
     ladeTabelle();
   </script>
 </body>
+</html>
+
 </html>
