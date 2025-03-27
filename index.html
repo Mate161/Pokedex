@@ -1,4 +1,206 @@
 <!DOCTYPE html>
 <html lang="de">
-<!-- (HTML-Inhalt wurde oben bereits vollständig bestätigt) -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maté's Pokédex</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #121212;
+      color: #f0f0f0;
+    }
+    h1 {
+      text-align: center;
+      color: #90caf9;
+    }
+    #filter {
+      margin-bottom: 15px;
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      background-color: #1e1e1e;
+      color: #ffffff;
+      border: 1px solid #444;
+    }
+    .table-wrapper {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      min-width: 800px;
+    }
+    th, td {
+      border: 1px solid #333;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #263238;
+      color: #f0f0f0;
+      cursor: pointer;
+    }
+    tr:nth-child(even) {
+      background-color: #1e1e1e;
+    }
+    tr:nth-child(odd) {
+      background-color: #2c2c2c;
+    }
+    .summary {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    .tauschbox {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: #1f1f1f;
+      border: 1px solid #333;
+      border-radius: 8px;
+    }
+    .kontakt-button {
+      margin-top: 10px;
+      background-color: #90caf9;
+      color: #000;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .kontakt-button:hover {
+      background-color: #64b5f6;
+    }
+    #kontaktinfo {
+      display: none;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Maté's Pokédex</h1>
+  <input type="text" id="filter" placeholder="Karte suchen..." onkeyup="filterTable()" />
+
+  <div class="table-wrapper">
+    <table id="kartenTabelle">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Name</th>
+          <th onclick="sortTable(1)">Kartennr.</th>
+          <th onclick="sortTable(2)">Pokémon-Typ</th>
+          <th onclick="sortTable(3)">Sprache</th>
+          <th onclick="sortTable(4)">Zustand</th>
+          <th onclick="sortTable(5)">Holo-Typ</th>
+          <th onclick="sortTable(6)">Seltenheit</th>
+          <th onclick="sortTable(7)">Edition</th>
+          <th onclick="sortTable(8)">Marktwert (€)</th>
+        </tr>
+      </thead>
+      <tbody id="kartenBody"></tbody>
+    </table>
+  </div>
+
+  <div class="summary" id="kartenzahl"></div>
+
+  <div class="tauschbox">
+    <p>Dir fehlt eine meiner doppelten Karten in deiner Sammlung? Lass uns tauschen!</p>
+    <button class="kontakt-button" onclick="zeigeKontakt()">Kontaktdaten anzeigen</button>
+    <div id="kontaktinfo">Mail: dominikschlegel1998@gmail.com</div>
+  </div>
+
+  <script>
+    const karten = [
+      { name: "Trainer Matt", nummer: "164/142", typ: "Trainer", sprache: "DE", zustand: "Neu", holo: "Full Art Holo", seltenheit: "Ultra Rare", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "7.50" },
+      { name: "Kickerlo", nummer: "147/142", typ: "Feuer", sprache: "DE", zustand: "Neu", holo: "Full Art Holo", seltenheit: "Illustration Rare", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "6.79" },
+      { name: "Riolu", nummer: "081/142", typ: "Kampf", sprache: "DE", zustand: "Neu", holo: "Reverse Holo", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "1.35" },
+      { name: "Wie-Shu", nummer: "084/142", typ: "Kampf", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Uncommon", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.99" },
+      { name: "Noctuh", nummer: "115/142", typ: "Farblos", sprache: "DE", zustand: "Neu", holo: "Holo", seltenheit: "Holo Rare", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.61" },
+      { name: "Tortunator", nummer: "025/142", typ: "Feuer/Drache", sprache: "DE", zustand: "Neu", holo: "Reverse Holo", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.41" },
+      { name: "Trainer Brianna", nummer: "132/142", typ: "Trainer", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Uncommon", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.09" },
+      { name: "Wattzapf", nummer: "050/142", typ: "Elektro", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.08" },
+      { name: "Lampi", nummer: "048/142", typ: "Elektro/Wasser", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.07" },
+      { name: "Klikdiklak", nummer: "101/142", typ: "Metall", sprache: "DE", zustand: "Neu", holo: "Reverse Holo", seltenheit: "Holo Rare", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.03" },
+      { name: "Adebom", nummer: "097/142", typ: "Unlicht/Flug", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.10" },
+      { name: "Azumarill", nummer: "034/142", typ: "Wasser/Fee", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Uncommon", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.10" },
+      { name: "Lanturn", nummer: "049/142", typ: "Elektro/Wasser", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Uncommon", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.10" },
+      { name: "Gruff", nummer: "070/142", typ: "Pflanze", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.04" },
+      { name: "Mabula", nummer: "009/142", typ: "Käfer", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.04" },
+      { name: "Makabaja", nummer: "062/142", typ: "Geist", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.04" },
+      { name: "Schlukwech", nummer: "092/142", typ: "Gift", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Uncommon", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.03" },
+      { name: "2× Tentagra", nummer: "017/142", typ: "Wasser", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.04" }
+    ];
+
+    function ladeTabelle() {
+      const tbody = document.getElementById("kartenBody");
+      tbody.innerHTML = "";
+      let anzahl = 0;
+      karten.forEach(k => {
+        let menge = 1;
+        if (k.name.includes("×")) {
+          menge = parseInt(k.name.split("×")[0]);
+        }
+        anzahl += menge;
+        let row = `<tr>
+          <td>${k.name}</td>
+          <td>${k.nummer}</td>
+          <td>${k.typ}</td>
+          <td>${k.sprache}</td>
+          <td>${k.zustand}</td>
+          <td>${k.holo}</td>
+          <td>${k.seltenheit}</td>
+          <td>${k.edition}</td>
+          <td>${parseFloat(k.marktwert).toFixed(2)}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+      document.getElementById("kartenzahl").innerText = `Gesamtanzahl Karten: ${anzahl}`;
+    }
+
+    function zeigeKontakt() {
+      const info = document.getElementById("kontaktinfo");
+      info.style.display = info.style.display === "none" ? "block" : "none";
+    }
+
+    function filterTable() {
+      const input = document.getElementById("filter").value.toLowerCase();
+      const rows = document.getElementById("kartenBody").getElementsByTagName("tr");
+      for (let row of rows) {
+        row.style.display = [...row.children].some(cell =>
+          cell.innerText.toLowerCase().includes(input)
+        ) ? "" : "none";
+      }
+    }
+
+    function sortTable(n) {
+      const table = document.getElementById("kartenTabelle");
+      let switching = true, dir = "asc", switchcount = 0;
+      while (switching) {
+        switching = false;
+        const rows = table.rows;
+        for (let i = 1; i < rows.length - 1; i++) {
+          let shouldSwitch = false;
+          const x = rows[i].getElementsByTagName("TD")[n];
+          const y = rows[i + 1].getElementsByTagName("TD")[n];
+          const xVal = isNaN(x.innerHTML) ? x.innerHTML.toLowerCase() : parseFloat(x.innerHTML);
+          const yVal = isNaN(y.innerHTML) ? y.innerHTML.toLowerCase() : parseFloat(y.innerHTML);
+          if ((dir === "asc" && xVal > yVal) || (dir === "desc" && xVal < yVal)) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          switchcount++;
+        } else if (switchcount === 0 && dir === "asc") {
+          dir = "desc";
+          switching = true;
+        }
+      }
+    }
+
+    ladeTabelle();
+  </script>
+</body>
 </html>
