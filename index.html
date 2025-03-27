@@ -53,6 +53,29 @@
       margin-top: 20px;
       font-weight: bold;
     }
+    .tauschbox {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: #1f1f1f;
+      border: 1px solid #333;
+      border-radius: 8px;
+    }
+    .kontakt-button {
+      margin-top: 10px;
+      background-color: #90caf9;
+      color: #000;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .kontakt-button:hover {
+      background-color: #64b5f6;
+    }
+    #kontaktinfo {
+      display: none;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -78,36 +101,19 @@
     </table>
   </div>
 
-  <div class="summary" id="gesamtwert"></div>
   <div class="summary" id="kartenzahl"></div>
 
-  <script>
-    const karten = [
-      { name: "Trainer Matt", nummer: "164/142", typ: "Trainer", sprache: "DE", zustand: "Neu", holo: "Full Art Holo", seltenheit: "Ultra Rare", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "7.50" },
-      { name: "Kickerlo", nummer: "147/142", typ: "Feuer", sprache: "DE", zustand: "Neu", holo: "Full Art Holo", seltenheit: "Illustration Rare", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "6.79" },
-      { name: "Riolu", nummer: "081/142", typ: "Kampf", sprache: "DE", zustand: "Neu", holo: "Reverse Holo", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "1.35" },
-      { name: "Wie-Shu", nummer: "084/142", typ: "Kampf", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Uncommon", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.99" },
-      { name: "Noctuh", nummer: "115/142", typ: "Farblos", sprache: "DE", zustand: "Neu", holo: "Holofoil", seltenheit: "Holo Rare", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.61" },
-      { name: "Tortunator", nummer: "025/142", typ: "Feuer/Drache", sprache: "DE", zustand: "Neu", holo: "Reverse Holo", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.41" },
-      { name: "Trainer Brianna", nummer: "132/142", typ: "Trainer", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Uncommon", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.09" },
-      { name: "Wattzapf", nummer: "050/142", typ: "Elektro", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.08" },
-      { name: "Lampi", nummer: "048/142", typ: "Elektro/Wasser", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.07" },
-      { name: "Klikdiklak", nummer: "101/142", typ: "Metall", sprache: "DE", zustand: "Neu", holo: "Reverse Holo", seltenheit: "Holo Rare", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.03" },
-      { name: "Adebom", nummer: "097/142", typ: "Unlicht/Flug", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.10" },
-      { name: "Azumarill", nummer: "034/142", typ: "Wasser/Fee", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Uncommon", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.10" },
-      { name: "Lanturn", nummer: "049/142", typ: "Elektro/Wasser", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Uncommon", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.10" },
-      { name: "Gruff", nummer: "070/142", typ: "Pflanze", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.04" },
-      { name: "Mabula", nummer: "009/142", typ: "Käfer", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.04" },
-      { name: "Makabaja", nummer: "062/142", typ: "Geist", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.04" },
-      { name: "Schlukwech", nummer: "092/142", typ: "Gift", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Uncommon", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.03" },
-      { name: "2× Tentagra", nummer: "017/142", typ: "Wasser", sprache: "DE", zustand: "Neu", holo: "Standard", seltenheit: "Common", edition: "Karmesin & Purpur – Stellarkrone", marktwert: "0.04" }
-      // (Rest der Karten hier einfügen, gekürzt für Beispiel)
-    ];
+  <div class="tauschbox">
+    <p>Dir fehlt eine meiner doppelten Karten in deiner Sammlung? Lass uns tauschen!</p>
+    <button class="kontakt-button" onclick="zeigeKontakt()">Kontaktdaten anzeigen</button>
+    <div id="kontaktinfo">Mail: dominikschlegel1998@gmail.com</div>
+  </div>
 
+  <script>
+    const karten = []; // Kartendaten müssen neu eingefügt werden
     function ladeTabelle() {
       const tbody = document.getElementById("kartenBody");
       tbody.innerHTML = "";
-      let gesamt = 0;
       let anzahl = 0;
       karten.forEach(k => {
         let menge = 1;
@@ -127,12 +133,13 @@
           <td>${parseFloat(k.marktwert).toFixed(2)}</td>
         </tr>`;
         tbody.innerHTML += row;
-        gesamt += parseFloat(k.marktwert);
       });
-      document.getElementById("gesamtwert").innerText = `Gesamtwert deiner Sammlung: ${gesamt.toFixed(2)} €`;
       document.getElementById("kartenzahl").innerText = `Gesamtanzahl Karten: ${anzahl}`;
     }
-
+    function zeigeKontakt() {
+      const info = document.getElementById("kontaktinfo");
+      info.style.display = info.style.display === "none" ? "block" : "none";
+    }
     function filterTable() {
       const input = document.getElementById("filter").value.toLowerCase();
       const rows = document.getElementById("kartenBody").getElementsByTagName("tr");
@@ -142,7 +149,6 @@
         ) ? "" : "none";
       }
     }
-
     function sortTable(n) {
       const table = document.getElementById("kartenTabelle");
       let switching = true, dir = "asc", switchcount = 0;
@@ -170,7 +176,6 @@
         }
       }
     }
-
     ladeTabelle();
   </script>
 </body>
